@@ -1,0 +1,31 @@
+# Maintainer: Sean Kurtz <seankurtz75@gmail.com>
+
+pkgname=gnome-firmware-updater
+pkgver=42.0
+pkgrel=0.1
+pkgdesc="Manage firmware on devices supported by fwupd"
+arch=(x86_64)
+url="https://gitlab.gnome.org/hughsie/gnome-firmware-updater"
+license=(GPL2)
+depends=(gtk4 glib2 fwupd libxmlb libhandy help2man libadwaita)
+makedepends=(git meson)
+source=("git+https://gitlab.gnome.org/hughsie/gnome-firmware-updater")
+sha256sums=('SKIP')
+
+prepare(){
+  cd $pkgname
+}
+
+build(){
+  arch-meson $pkgname build
+  meson compile -C build
+}
+
+check(){
+  meson test -C build --print-errorlogs
+}
+
+package(){
+  meson install -C build --destdir "{pkgdir}"
+}
+
